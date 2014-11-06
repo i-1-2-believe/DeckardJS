@@ -1,0 +1,185 @@
+/* Housing we shall class eponymously */
+.deckard {
+	background-color: dimgrey;
+}
+
+/* Navigational interaction */
+.curtain {
+	border-left: 1px solid transparent; /* Need a border (left works in all browsers) to separate horizontal margins collapsing in on themselves (see what happens when you remove this style); also refer to http://www.w3.org/TR/CSS21/box.html#collapsing-margins */
+	display: table-cell;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+}
+.curtain:hover {
+	background-color: dodgerblue;
+	opacity: 0.5;
+	filter: alpha(opacity=40) \9; /* MSIE specific */
+}
+.stage {
+	display: table-cell;
+	margin: 0 auto;
+	/*width: 1190px;*/
+	position: relative;
+}
+
+/* Firefox bug 803735: a symptom of which is that any child with positioning (e.g 
+position:absolute; left:100px;) of a parent with display:table-cell;, will ignore 
+the parent and position itself against the next ancestor. The workaround is to 
+surround with another div to hug the parent and catch the child positioning */
+.firefox-stage {
+	position: relative; 
+}
+
+.belt {}
+
+/* Crumb Trail */
+.pagination {
+	display: table;
+	/*margin: 0 auto;
+	width: 400px;*/
+	width: 100%;
+	height: 30px;
+	position: relative;
+	overflow: hidden; /* Firefox does not compute overflow-x */
+	padding: 5px 0 5px 0;
+}
+.crumbtrail {
+	/*display: table;
+	margin: 0 auto;*/
+	position: absolute;
+}
+.crumb-outer {
+	display: table-cell;
+	position: relative;
+	*float: left; /* MSIE7 hack to emulate display: table-cell; */
+}
+.crumb-outer:hover .crumb-inner {
+	background-color: white;
+}
+.crumb-inner {
+	width: 10px;
+	height: 10px;
+	margin-right: 20px;
+	background-color: darkgrey;
+	border-radius: 5px;
+	position: relative;
+}
+.crumb-inner.selected {
+	background-color: white;
+}
+
+/* Film Strip */
+.navigation {
+	display: table;
+	width: 100%;
+	/*height: 80px;*/
+	position: relative;
+	overflow: hidden; /* Firefox does not compute overflow-x */
+	padding: 5px 0 5px 0;
+}
+.filmstrip {
+	position: absolute;
+	/*width: 10000px;*/
+}
+.frame-outer {
+	display: table-cell;
+	position: relative;
+	*float: left; /* MSIE7 hack to emulate display: table-cell; */
+}
+.frame-inner {
+	/*width: 110px;
+	height: 80px;*/
+	margin-right: 10px;
+	background-color: darkgrey;
+	border-radius: 5px;
+	position: relative;
+}
+.frame-inner.selected {
+	background-color: white;
+}
+
+/* Slide Deck */
+.presentation {
+	display: table;
+	width: 100%;
+	/*height: 900px;*/
+	position: relative;
+	overflow: hidden; /* Firefox does not compute overflow-x */
+	padding: 5px 0 5px 0;
+}
+.slidedeck {
+	position: absolute;
+	/*width: 10000px;*/
+}
+.slide-outer {
+	display: table-cell;
+	position: relative;
+	*float: left; /* MSIE7 hack to emulate display: table-cell; */
+}
+.slide-inner {
+	/*width: 1190px;
+	height: 880px;*/
+	margin-right: 20px;
+	position: relative;
+}
+.slide-inner.selected {
+	background-color: white;
+}
+
+/* Generic styling for item content */
+.content {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.mystyle {
+	height: 500px;
+	width: 1000px;
+	border-radius: 5px;
+	background-color: ghostwhite;
+}
+
+/* DEBUG */
+body.debug .curtain {
+	background-color: palegoldenrod;
+	opacity: 0.5;
+	filter: alpha(opacity=50) \9; /* MSIE specific */
+}
+body.debug .stage {
+	background-color: dimgray;
+}
+/* Crumb Trail */
+body.debug .pagination {
+}
+body.debug .crumbtrail {
+	background-color: lightblue;
+}
+body.debug .crumb-outer {
+}
+body.debug .crumb-inner {
+	background-color: lightgray;
+}
+/* Film Strip */
+body.debug .navigation {
+}
+body.debug .filmstrip {
+	background-color: lightblue;
+}
+body.debug .frame-outer {
+}
+body.debug .frame-inner {
+	background-color: lightgray;
+}
+/* Slide Deck */
+body.debug .presentation {
+}
+body.debug .slidedeck {
+	background-color: lightblue;
+}
+body.debug .slide-outer {
+}
+body.debug .slide-inner {
+	background-color: lightgray;
+}
