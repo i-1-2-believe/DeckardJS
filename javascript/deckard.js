@@ -1,7 +1,8 @@
 'use strict';
 
 var Deckard = function (container) {
-	var container = $(container);
+	var self = this;
+	container = $(container);
 	var items = $(container).children();
 	if (items.length) {
 		//Get the slide dimensions to fit everything around
@@ -27,63 +28,59 @@ var Deckard = function (container) {
 		var navigation = '';
 		var pagination = '';
 		items.each(function (index, item) {
-			presentation = presentation + 
-				'<div id="" class="slide-outer">\
-	    			<div id="" class="slide-inner" style="height:' + dim.height + 'px; width:' + dim.width + 'px;">' + 
-    					this.outerHTML +
-    				'</div>\
-	    		</div>';
+			presentation += '<div id="" class="slide-outer">';
+	    	presentation += 	'<div id="" class="slide-inner" style="height:' + dim.height + 'px; width:' + dim.width + 'px;">';
+    		presentation += 		this.outerHTML;
+    		presentation += '</div>';
+	    	presentation += 	'</div>';
 
-	    	navigation = navigation + 
-				'<div id="" class="frame-outer">\
-	    			<div id="" class="frame-inner" style="height:' + frameHeight + 'px; width:' + frameWidth + 'px;">\
-	    				<div class="content">' + index + '</div>\
-	    			</div>\
-	    		</div>';
+	    	navigation += 	'<div id="" class="frame-outer">';
+	    	navigation += 		'<div id="" class="frame-inner" style="height:' + frameHeight + 'px; width:' + frameWidth + 'px;">';
+	    	navigation += 			'<div class="content">' + index + '</div>';
+	    	navigation += 		'</div>';
+	    	navigation += 	'</div>';
 		});
 		for (var i = 0; i < filmstripTotal; i++) {
-			pagination = pagination + 
-				'<div id="" class="crumb-outer">\
-	    			<div id="" class="crumb-inner">\
-	    				<div class="content"></div>\
-	    			</div>\
-	    		</div>';
+			pagination += 	'<div id="" class="crumb-outer">';
+	    	pagination += 		'<div id="" class="crumb-inner">';
+	    	pagination += 			'<div class="content"></div>';
+	    	pagination += 		'</div>';
+	    	pagination += 	'</div>';
 		}
 		//Write curtains, stage, and belt around items and supply dimensions
-		markup =  
-			'<div id="" class="pagination" style="' + (crumbtrailTotal === 1 ? 'margin: 0 auto;' : '') + '">\
-			    <div id="" class="curtain curtain-left"></div>\
-				<div id="" class="stage" style="width:' + crumbtrailWidth + 'px;">\
-			    	<div id="" class="firefox-stage">\
-						<div id="" class="belt crumbtrail">' +
-							pagination + 
-						'</div>\
-			      	</div>\
-			    </div>\
-			  	<div id="" class="curtain curtain-right"></div>\
-			</div>\
-			<div id="" class="navigation">\
-			    <div id="" class="curtain curtain-left"></div>\
-				<div id="" class="stage" style="height:' + frameHeight + 'px;width:' + dim.width + 'px;">\
-			    	<div id="" class="firefox-stage">\
-						<div id="" class="belt filmstrip">' +
-							navigation + 
-						'</div>\
-			      	</div>\
-			    </div>\
-			  	<div id="" class="curtain curtain-right"></div>\
-			</div>\
-			<div id="" class="presentation">\
-			    <div id="" class="curtain curtain-left"></div>\
-				<div id="" class="stage"  style="height:' + dim.height + 'px; width:' + dim.width + 'px;">\
-			    	<div id="" class="firefox-stage">\
-						<div id="" class="belt slidedeck">' +
-							presentation + 
-						'</div>\
-			      	</div>\
-			    </div>\
-			  	<div id="" class="curtain curtain-right"></div>\
-			</div>';
+		markup +=	'<div id="" class="pagination" style="' + (crumbtrailTotal === 1 ? 'margin: 0 auto;' : '') + '">';
+		markup +=	'<div id="" class="curtain curtain-left"></div>';
+		markup +=	'<div id="" class="stage" style="width:' + crumbtrailWidth + 'px;">';
+		markup +=	'<div id="" class="firefox-stage">';
+		markup +=	'<div id="" class="belt crumbtrail">';
+		markup +=	pagination;
+		markup +=	'</div>';
+		markup +=	'</div>';
+		markup +=	'</div>';
+		markup +=	'<div id="" class="curtain curtain-right"></div>';
+		markup +=	'</div>';
+		markup +=	'<div id="" class="navigation">';
+		markup +=	'<div id="" class="curtain curtain-left"></div>';
+		markup +=	'<div id="" class="stage" style="height:' + frameHeight + 'px;width:' + dim.width + 'px;">';
+		markup +=	'<div id="" class="firefox-stage">';
+		markup +=	'<div id="" class="belt filmstrip">';
+		markup +=	navigation;
+		markup +=	'</div>';
+		markup +=	'</div>';
+		markup +=	'</div>';
+		markup +=	'<div id="" class="curtain curtain-right"></div>';
+		markup +=	'</div>';
+		markup +=	'<div id="" class="presentation">';
+		markup +=	'<div id="" class="curtain curtain-left"></div>';
+		markup +=	'<div id="" class="stage"  style="height:' + dim.height + 'px; width:' + dim.width + 'px;">';
+		markup +=	'<div id="" class="firefox-stage">';
+		markup +=	'<div id="" class="belt slidedeck">';
+		markup +=	presentation;
+		markup +=	'</div>';
+		markup +=	'</div>';
+		markup +=	'</div>';
+		markup +=	'<div id="" class="curtain curtain-right"></div>';
+		markup +=	'</div>';
 		
 		//Overwrite with new markup
 		$(container).html(markup);
@@ -93,46 +90,67 @@ var Deckard = function (container) {
 			total: items.length,
 			current: 1,
 			size: 1,
-			isEnabled: true
+			isEnabled: true,
+			toString: function () { return 'slidedeck'; }
 		};
 		var filmstrip = {
 			el: $('.deckard .navigation .filmstrip'),
 			total: filmstripTotal,
 			current: 1,
 			size: 10,
-			isEnabled: true
+			isEnabled: true,
+			toString: function () { return 'filmstrip'; }
 		};
 		var crumbtrail = {
 			el: $('.deckard .pagination .crumbtrail'),
 			total: crumbtrailTotal,
 			current: 1,
 			size: Math.ceil(dim.width / 30),
-			isEnabled: true
+			isEnabled: true,
+			toString: function () { return 'crumbtrail'; }
 		};
+
+		Deckard.mediator.register(slidedeck);
+		Deckard.mediator.register(filmstrip);
+		Deckard.mediator.register(crumbtrail);
+
+		var trackMoveFactory = function (stream) {
+			return function (event, data) {
+				if (event === 'move') {
+					$(stream.el[0].childNodes).find('.selected').removeClass('selected');
+					self.move(stream)(Math.floor((data.current-1) / stream.size));
+					$(stream.el[0].childNodes[data.current-1].firstChild).addClass('selected');
+				}
+			};
+		};
+
+		Deckard.mediator.subscribe(slidedeck, null, trackMoveFactory(filmstrip));
+		Deckard.mediator.subscribe(filmstrip, null, trackMoveFactory(crumbtrail));
+		
 		//Attach move handlers
-		$(container).find('.presentation .curtain-right').on('click', function () { move(slidedeck)('left'); });
-		$(container).find('.presentation .curtain-left').on('click', function () { move(slidedeck)('right'); });
+		$(container).find('.presentation .curtain-right').on('click', function () { self.move(slidedeck)('left'); });
+		$(container).find('.presentation .curtain-left').on('click', function () { self.move(slidedeck)('right'); });
 
-		$(container).find('.navigation .curtain-right').on('click', function () { move(filmstrip)('left'); });
-		$(container).find('.navigation .curtain-left').on('click', function () { move(filmstrip)('right'); });
+		$(container).find('.navigation .curtain-right').on('click', function () { self.move(filmstrip)('left'); });
+		$(container).find('.navigation .curtain-left').on('click', function () {self. move(filmstrip)('right'); });
 
-		$(container).find('.pagination .curtain-right').on('click', function () { move(crumbtrail)('left'); });
-		$(container).find('.pagination .curtain-left').on('click', function () { move(crumbtrail)('right'); });
+		$(container).find('.pagination .curtain-right').on('click', function () { self.move(crumbtrail)('left'); });
+		$(container).find('.pagination .curtain-left').on('click', function () { self.move(crumbtrail)('right'); });
 
-		$(container).find('.presentation').on('swiperight', function () { move(slidedeck)('right'); });
-		$(container).find('.presentation').on('swipeleft', function () { move(slidedeck)('left'); });
+		$(container).find('.presentation').on('swiperight', function () { self.move(slidedeck)('right'); });
+		$(container).find('.presentation').on('swipeleft', function () { self.move(slidedeck)('left'); });
 
-		$(container).find('.navigation').on('swiperight', function () { move(filmstrip)('right'); });
-		$(container).find('.navigation').on('swipeleft', function () { move(filmstrip)('left'); });
+		$(container).find('.navigation').on('swiperight', function () { self.move(filmstrip)('right'); });
+		$(container).find('.navigation').on('swipeleft', function () { self.move(filmstrip)('left'); });
 
-		$(container).find('.pagination').on('swiperight', function () { move(crumbtrail)('right'); });
-		$(container).find('.pagination').on('swipeleft', function () { move(crumbtrail)('left'); });
+		$(container).find('.pagination').on('swiperight', function () { self.move(crumbtrail)('right'); });
+		$(container).find('.pagination').on('swipeleft', function () { self.move(crumbtrail)('left'); });
 
 		$(container).find('.pagination .stage .belt .crumb-outer').on('click', function () {
-			move(filmstrip)($(this).index());
+			self.move(filmstrip)($(this).index());
 		});
 		$(container).find('.navigation .stage .belt .frame-outer').on('click', function () {
-			move(slidedeck)($(this).index());
+			self.move(slidedeck)($(this).index());
 		});
 	}
 };
@@ -143,7 +161,7 @@ var Deckard = function (container) {
 Deckard.prototype.init = function () {
 };
 
-var move = function (stream) {
+Deckard.prototype.move = function (stream) {
 	return function (vector) {
 		var hasRoom = false;
 		var displacement = undefined;
@@ -162,15 +180,62 @@ var move = function (stream) {
 		}
 		if (hasRoom && stream.isEnabled) {
 			stream.isEnabled = false;
-			var position = parseInt($(stream.el).css('left'), 10); 
+			var position = parseInt(stream.el[0].style.left, 10); 
 			position = (isNaN(position) ? 0 : position); 
-			var cardWidth = parseInt($(stream.el).find('> div').css('width'), 10) * stream.size;
+			var cardWidth = parseInt($(stream.el[0].firstChild).css('width'), 10) * stream.size;
+			//stream.el[0].style.left = (position - (displacement * cardWidth)) + 'px';
 			$(stream.el).animate({
 				'left': position - (displacement * cardWidth)
-			}, function () {
-				stream.current += displacement;
-				stream.isEnabled = true;
+			}, {
+				queue: false,
+				complete: function () {
+					stream.current += displacement;
+					stream.isEnabled = true;
+
+					window.setTimeout(function () {
+						Deckard.mediator.publish(stream, 'move', {
+							vector: vector,
+							hasRoom: hasRoom,
+							displacement: displacement,
+							current: stream.current
+						});
+					}, 500);
+				}
 			});
 		}
 	};
+};
+
+Deckard.mediator = {
+	subscriptions: {
+		'move': []
+	},
+	register: function (publisher) {
+		var registered = false;
+		if (publisher && !this.subscriptions[publisher]) {
+			this.subscriptions[publisher] = [];
+			registered = true;
+		} 
+		return registered;
+	},
+	publish: function (publisher, event, data) {
+		if (publisher && this.subscriptions[publisher]) {
+			for (var callback in this.subscriptions[publisher]) {
+				this.subscriptions[publisher][callback](event, data);
+			}
+		}
+		if (event && this.subscriptions[event]) {
+			for (var callback in this.subscriptions[event]) {
+				this.subscriptions[event][callback](event, data);
+			}
+		}
+	},
+	subscribe: function (publisher, event, callback) {
+		if (publisher && this.subscriptions[publisher]) {
+			this.subscriptions[publisher].push(callback);
+		}
+		if (event && this.subscriptions[event]) {
+			this.subscriptions[event].push(callback);
+		}
+	}
 };
