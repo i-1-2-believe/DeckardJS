@@ -17,7 +17,7 @@
 	    	var container = $('#deckard1');
 	    	for (var i = 0; i < 1000; i++) {
 	    		var prefix = '0000'.substr(0, (4 - i.toString().length));
-	    		container.append('<div id="" class="content mystyle"><span>' + prefix + '' + i + '</span></div>');
+	    		container.append('<div id="" class="content mystyle" deckard-slide-label="' + prefix + i + '"><span></span></div>');
 	    	}
 	    	var deckard1 = new Deckard(container);
 	    </script>
