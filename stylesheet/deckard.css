@@ -92,7 +92,6 @@ surround with another div to hug the parent and catch the child positioning */
 	height: 80px;*/
 	margin-right: 10px;
 	background-color: darkgrey;
-	border-radius: 5px;
 	position: relative;
 	text-align: center;
 }
@@ -133,13 +132,6 @@ surround with another div to hug the parent and catch the child positioning */
 	width: 100%;
 	height: 100%;
 	position: absolute;
-}
-
-.mystyle {
-	height: 500px;
-	width: 1000px;
-	border-radius: 5px;
-	background-color: ghostwhite;
 }
 
 /* DEBUG */
