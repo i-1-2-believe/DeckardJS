@@ -94,6 +94,7 @@ surround with another div to hug the parent and catch the child positioning */
 	background-color: darkgrey;
 	border-radius: 5px;
 	position: relative;
+	text-align: center;
 }
 .frame-inner.selected {
 	background-color: white;
