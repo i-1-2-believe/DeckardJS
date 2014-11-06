@@ -192,14 +192,12 @@ Deckard.prototype.move = function (stream) {
 					stream.current += displacement;
 					stream.isEnabled = true;
 
-					window.setTimeout(function () {
-						Deckard.mediator.publish(stream, 'move', {
-							vector: vector,
-							hasRoom: hasRoom,
-							displacement: displacement,
-							current: stream.current
-						});
-					}, 500);
+					Deckard.mediator.publish(stream, 'move', {
+						vector: vector,
+						hasRoom: hasRoom,
+						displacement: displacement,
+						current: stream.current
+					});
 				}
 			});
 		}
