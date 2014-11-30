@@ -1,9 +1,27 @@
 'use strict';
 
-var Deckard = function (container) {
+var Deckard = function (container, config) {
 	var self = this;
 	container = $(container);
 	var items = $(container).children();
+
+	var defaultConfig = {
+		enablePagination: true,
+		enableNavigation: true,
+		framesPerFilmstrip: 10
+	}
+
+	//Fold the default configuration into the supplied configuration, to fill in any gaps
+	if (!config || (typeof config == 'object' && !(config instanceof Array))) {
+		config = defaultConfig;
+	} else {
+		for (var c in defaultConfig) {
+			if (!config[c]) {
+				config[c] = defaultConfig[c];
+			}
+		}
+	}
+
 	if (items.length) {
 		//Get the slide dimensions to fit everything around
 		var dim = {
@@ -12,12 +30,11 @@ var Deckard = function (container) {
 		};
 		
 		//Calculate filmstrip frame sizes
-		var framesPerFilmstrip = 10;
-		var frameWidth = Math.round(((dim.width - (framesPerFilmstrip - 1) * 10) / framesPerFilmstrip)); // (x-1)*10: take into account x-1 right margins; /x: want to fit x frames;
+		var frameWidth = Math.round(((dim.width - (config.framesPerFilmstrip - 1) * 10) / config.framesPerFilmstrip)); // (x-1)*10: take into account x-1 right margins; /x: want to fit x frames;
 		var frameHeight = Math.round(dim.height * (frameWidth / dim.width)); // Apply the scale factor from frameWidth to frameHeight, to maintain proportions
 		
 		//Calculate filmstrip quantity (crumbtrail page quantity)
-		var filmstripTotal = Math.ceil(items.length / framesPerFilmstrip);
+		var filmstripTotal = Math.ceil(items.length / config.framesPerFilmstrip);
 		//TODO: work out if pages overflow width of stage or not, if not, apply centering.
 		var crumbtrailTotal = Math.ceil(((filmstripTotal * 10) + ((filmstripTotal - 1) * 20)) / dim.width);
 		var crumbtrailWidth = Math.min(dim.width, (filmstripTotal * 10) + ((filmstripTotal - 1) * 20));
