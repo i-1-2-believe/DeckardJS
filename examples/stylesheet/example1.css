@@ -1,0 +1,14 @@
+@import url(http://fonts.googleapis.com/css?family=Rajdhani:700);
+
+.deckard .frame-inner {
+	background-color: transparent;
+	font-family: 'rajdhani', helvetica, arial, sans-serif;
+	font-size: 40px;
+}
+
+.slide {
+	height: 500px;
+	width: 1000px;
+	border-radius: 0px;
+	background-color: cornflowerblue;
+}

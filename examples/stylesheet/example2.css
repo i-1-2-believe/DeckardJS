@@ -1,0 +1,76 @@
+.deckard .frame-inner {
+	border-radius: 5px;
+}
+
+.myframe {
+	height: 100%;
+	width: 100%;
+	border-radius: 5px;
+	background-size: 100%;
+	background-position: center;
+}
+
+/* Custom height and width for slides must be defined or overridden */
+.myslide {
+	height: 500px;
+	width: 800px;
+	border-radius: 15px;
+	background-position: center;
+	font-family: helvetica, arial, sans-serif;
+	
+}
+
+.slide-header {
+	padding: 10px;
+	background-color: rgba(255,255,255,0.5);
+	border-radius: 15px 15px 0 0;
+	color: black;
+	font-size: 18px;
+}
+.slide-footer {
+	margin-top: 425px;
+	padding: 10px;
+	color: white;
+	text-align: right;
+	font-size: 12px;
+}
+
+#myframe1, #myslide1 {
+	background-image: url('../image/example2_1.jpg');
+}
+
+#myframe2, #myslide2 {
+	background-image: url('../image/example2_2.jpg');
+}
+
+#myframe3, #myslide3 {
+	background-image: url('../image/example2_3.jpg');
+}
+
+#myframe4, #myslide4 {
+	background-image: url('../image/example2_4.jpg');
+}
+
+#myframe5, #myslide5 {
+	background-image: url('../image/example2_5.jpg');
+}
+
+#myframe6, #myslide6 {
+	background-image: url('../image/example2_6.jpg');
+}
+
+#myframe7, #myslide7 {
+	background-image: url('../image/example2_7.jpg');
+}
+
+#myframe8, #myslide8 {
+	background-image: url('../image/example2_8.jpg');
+}
+
+#myframe9, #myslide9 {
+	background-image: url('../image/example2_9.jpg');
+}
+
+#myframe10, #myslide10 {
+	background-image: url('../image/example2_10.jpg');
+}
