@@ -222,9 +222,13 @@ Deckard.prototype.move = function (stream) {
 };
 
 Deckard.mediator = {
+	// The keys are either the name of an object or event, and the values are a list of callbacks.
+	// Any time an object emits any event, its list of callbacks will be invoked.
+	// Any time an event is emitted by any object, its list of callbacks will be invoked.
 	subscriptions: {
 		'move': []
 	},
+	// Add objects (and indeed named events) to the subscriptions database.
 	register: function (publisher) {
 		var registered = false;
 		if (publisher && !this.subscriptions[publisher]) {
@@ -233,6 +237,7 @@ Deckard.mediator = {
 		} 
 		return registered;
 	},
+	// Emit an event and fire all relevant callbacks.
 	publish: function (publisher, event, data) {
 		if (publisher && this.subscriptions[publisher]) {
 			for (var callback in this.subscriptions[publisher]) {
@@ -245,6 +250,7 @@ Deckard.mediator = {
 			}
 		}
 	},
+	// Add callbacks for relevant objects or events.
 	subscribe: function (publisher, event, callback) {
 		if (publisher && this.subscriptions[publisher]) {
 			this.subscriptions[publisher].push(callback);
