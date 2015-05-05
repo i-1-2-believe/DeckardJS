@@ -12,14 +12,14 @@ var Deckard = function (container, config) {
 	}
 
 	//Fold the default configuration into the supplied configuration, to fill in any gaps
-	if (!config || (typeof config == 'object' && !(config instanceof Array))) {
-		config = defaultConfig;
-	} else {
+	if (config || (typeof config == 'object' && !(config instanceof Array))) {
 		for (var c in defaultConfig) {
-			if (!config[c]) {
+			if (!config.hasOwnProperty(c)) {
 				config[c] = defaultConfig[c];
 			}
 		}
+	} else {
+		config = defaultConfig;
 	}
 
 	if (items.length) {
@@ -65,7 +65,7 @@ var Deckard = function (container, config) {
 	    	pagination += 	'</div>';
 		}
 		//Write curtains, stage, and belt around items and supply dimensions
-		markup +=	'<div id="" class="pagination" style="' + (crumbtrailTotal === 1 ? 'margin: 0 auto;' : '') + '">';
+		markup +=	'<div id="" class="pagination" style="' + (crumbtrailTotal === 1 ? 'margin: 0 auto;' : '') + ' display:none;">';
 		markup +=		'<div id="" class="curtain curtain-left"></div>';
 		markup +=		'<div id="" class="stage" style="width:' + crumbtrailWidth + 'px;">';
 		markup +=			'<div id="" class="firefox-stage">';
@@ -76,7 +76,7 @@ var Deckard = function (container, config) {
 		markup +=		'</div>';
 		markup +=		'<div id="" class="curtain curtain-right"></div>';
 		markup +=	'</div>';
-		markup +=	'<div id="" class="navigation">';
+		markup +=	'<div id="" class="navigation" style="display:none;">';
 		markup +=		'<div id="" class="curtain curtain-left"></div>';
 		markup +=		'<div id="" class="stage" style="height:' + frameHeight + 'px;width:' + dim.width + 'px;">';
 		markup +=			'<div id="" class="firefox-stage">';
@@ -87,7 +87,7 @@ var Deckard = function (container, config) {
 		markup +=		'</div>';
 		markup +=		'<div id="" class="curtain curtain-right"></div>';
 		markup +=	'</div>';
-		markup +=	'<div id="" class="presentation">';
+		markup +=	'<div id="" class="presentation" style="display:none;">';
 		markup +=		'<div id="" class="curtain curtain-left"></div>';
 		markup +=		'<div id="" class="stage"  style="height:' + dim.height + 'px; width:' + dim.width + 'px;">';
 		markup +=			'<div id="" class="firefox-stage">';
@@ -103,7 +103,7 @@ var Deckard = function (container, config) {
 		$(container).html(markup);
 
 		var slidedeck = {
-			el: $('.deckard .presentation .slidedeck'),
+			el: $(container).find('.presentation .slidedeck'),
 			total: items.length,
 			current: 1,
 			size: 1,
@@ -111,7 +111,7 @@ var Deckard = function (container, config) {
 			toString: function () { return 'slidedeck'; }
 		};
 		var filmstrip = {
-			el: $('.deckard .navigation .filmstrip'),
+			el: $(container).find('.navigation .filmstrip'),
 			total: filmstripTotal,
 			current: 1,
 			size: 10,
@@ -119,7 +119,7 @@ var Deckard = function (container, config) {
 			toString: function () { return 'filmstrip'; }
 		};
 		var crumbtrail = {
-			el: $('.deckard .pagination .crumbtrail'),
+			el: $(container).find('.pagination .crumbtrail'),
 			total: crumbtrailTotal,
 			current: 1,
 			size: Math.ceil(dim.width / 30),
@@ -169,6 +169,15 @@ var Deckard = function (container, config) {
 		$(container).find('.navigation .stage .belt .frame-outer').on('click', function () {
 			self.move(slidedeck)($(this).index());
 		});
+
+		// Reveal everything
+		if (config.enablePagination) {
+		    self.show(crumbtrail);
+		}
+		if (config.enableNavigation) {
+		    self.show(filmstrip);
+		}
+		self.show(slidedeck);
 	}
 };
 
@@ -221,10 +230,24 @@ Deckard.prototype.move = function (stream) {
 	};
 };
 
+Deckard.prototype.hide = function (stream) {
+    stream.el.parent().parent().parent().css({'display': 'none'});
+    return stream;
+};
+
+Deckard.prototype.show = function (stream) {
+	stream.el.parent().parent().parent().css({'display': 'table'});
+	return stream;
+};
+
 Deckard.mediator = {
+	// The keys are either the name of an object or event, and the values are a list of callbacks.
+	// Any time an object emits any event, its list of callbacks will be invoked.
+	// Any time an event is emitted by any object, its list of callbacks will be invoked.
 	subscriptions: {
 		'move': []
 	},
+	// Add objects (and indeed named events) to the subscriptions database.
 	register: function (publisher) {
 		var registered = false;
 		if (publisher && !this.subscriptions[publisher]) {
@@ -233,6 +256,7 @@ Deckard.mediator = {
 		} 
 		return registered;
 	},
+	// Emit an event and fire all relevant callbacks.
 	publish: function (publisher, event, data) {
 		if (publisher && this.subscriptions[publisher]) {
 			for (var callback in this.subscriptions[publisher]) {
@@ -245,6 +269,7 @@ Deckard.mediator = {
 			}
 		}
 	},
+	// Add callbacks for relevant objects or events.
 	subscribe: function (publisher, event, callback) {
 		if (publisher && this.subscriptions[publisher]) {
 			this.subscriptions[publisher].push(callback);
