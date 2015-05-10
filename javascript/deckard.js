@@ -54,7 +54,7 @@ var Deckard = function (container, config) {
 
 	    	navigation += 	'<div id="" class="frame-outer">';
 	    	navigation += 		'<div id="" class="frame-inner" style="height:' + frameHeight + 'px; width:' + frameWidth + 'px;">';
-	    	navigation += 			'<div class="content">' + $(item).attr('deckard-slide-label') + '</div>';
+	    	navigation += 			'<div class="content" title="' + $(item).attr('deckard-slide-label') + '">' + $(item).attr('deckard-slide-label') + '</div>';
 	    	navigation += 		'</div>';
 	    	navigation += 	'</div>';
 		});
