@@ -176,7 +176,7 @@ var Deckard = function (container, config) {
 		});
 
         // Initialise selected style on first items
-        $(self.slidedeck.el[0].firstChild.firstChild).addClass('selected');
+        //$(self.slidedeck.el[0].firstChild.firstChild).addClass('selected'); slides should not have a style denoting selection
         $(self.filmstrip.el[0].firstChild.firstChild).addClass('selected');
         $(self.crumbtrail.el[0].firstChild.firstChild).addClass('selected');
         // Because programmatic initiation on first item will get ignored because it thinks it is already selected
