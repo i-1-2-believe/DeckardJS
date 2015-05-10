@@ -8,7 +8,8 @@ var Deckard = function (container, config) {
 	var defaultConfig = {
 		enablePagination: true,
 		enableNavigation: true,
-		framesPerFilmstrip: 10
+		framesPerFilmstrip: 10,
+		initialSlideIndex: 0
 	}
 
 	//Fold the default configuration into the supplied configuration, to fill in any gaps
@@ -174,31 +175,12 @@ var Deckard = function (container, config) {
 			self.move(self.slidedeck)(frameOuter.index());
 		});
 
-        // Expose move functions for programmatic manipulation
-        self.goTo = function (index) {
-        	// Limit to no lower than zero
-        	index = Math.max(0, index);
-        	// Limit to no higher than the number of items less one
-        	index = Math.min(index, items.length - 1);
-        	// We need only move the slidedeck, and the filmstrip and cumbtrail will listen out and react accordingly
-            self.move(self.slidedeck)(index);
-        };
-        // Quick functions for start and end
-        self.goToFirst = function () {
-            self.goTo(0);
-        };
-        self.goToLast = function () {
-            self.goTo(items.length - 1);
-        };
-        // Move left and right
-        self.goToLeft = function () {
-        	// Remember, going left is actually moving the deck right
-            self.move(self.slidedeck)('right');
-        };
-        self.goToRight = function () {
-        	// Remember, going right is actually moving the deck left
-            self.move(self.slidedeck)('left');
-        };
+        // Initialise selected style on first items
+        $(self.slidedeck.el[0].firstChild.firstChild).addClass('selected');
+        $(self.filmstrip.el[0].firstChild.firstChild).addClass('selected');
+        $(self.crumbtrail.el[0].firstChild.firstChild).addClass('selected');
+        // Because programmatic initiation on first item will get ignored because it thinks it is already selected
+        self.goTo(config.initialSlideIndex);
 
 		// Reveal everything
 		if (config.enablePagination) {
@@ -260,6 +242,32 @@ Deckard.prototype.move = function (stream) {
 			});
 		}
 	};
+};
+
+// Expose move functions for programmatic manipulation
+Deckard.prototype.goTo = function (index) {
+	// Limit to no lower than zero
+	index = Math.max(0, index);
+	// Limit to no higher than the number of items less one
+	index = Math.min(index, this.slidedeck.total - 1);
+	// We need only move the slidedeck, and the filmstrip and cumbtrail will listen out and react accordingly
+    this.move(this.slidedeck)(index);
+};
+// Quick functions for start and end
+Deckard.prototype.goToFirst = function () {
+    this.goTo(0);
+};
+Deckard.prototype.goToLast = function () {
+    this.goTo(this.slidedeck.total - 1);
+};
+// Move left and right
+Deckard.prototype.goToLeft = function () {
+	// Remember, going left is actually moving the deck right
+    this.move(this.slidedeck)('right');
+};
+Deckard.prototype.goToRight = function () {
+	// Remember, going right is actually moving the deck left
+    this.move(this.slidedeck)('left');
 };
 
 /* To mitigate flash of unstyled content (FOUC), use hiding and showing functions.
