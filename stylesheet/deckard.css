@@ -92,7 +92,8 @@ surround with another div to hug the parent and catch the child positioning */
 .frame-inner {
 	/*width: 110px;
 	height: 80px;*/
-	margin-right: 10px;
+	/*margin-right: 10px; // use padding instead to avoid void clicking areas */
+	padding-right: 10px;
 	background-color: darkgrey;
 	position: relative;
 	text-align: center;
