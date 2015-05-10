@@ -53,7 +53,6 @@ surround with another div to hug the parent and catch the child positioning */
 	display: table-cell;
 	position: relative;
 	*float: left; /* MSIE7 hack to emulate display: table-cell; */
-	cursor: pointer;
 }
 .crumb-outer:hover .crumb-inner {
 	background-color: white;
@@ -87,7 +86,6 @@ surround with another div to hug the parent and catch the child positioning */
 	display: table-cell;
 	position: relative;
 	*float: left; /* MSIE7 hack to emulate display: table-cell; */
-	cursor: pointer;
 }
 .frame-inner {
 	/*width: 110px;
