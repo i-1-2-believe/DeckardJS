@@ -166,13 +166,11 @@ var Deckard = function (container, config) {
 		$(container).find('.pagination').on('swiperight', function () { self.move(self.crumbtrail)('right'); });
 		$(container).find('.pagination').on('swipeleft', function () { self.move(self.crumbtrail)('left'); });
 
-		$(container).find('.pagination .stage .belt').on('click', function (e) {
-			var crumbOuter = $(e.target.offsetParent.offsetParent);
-			self.move(self.filmstrip)(crumbOuter.index());
+		$(container).find('.pagination .stage .belt .crumb-outer').on('click', function (e) {
+			self.move(self.filmstrip)($(this).index());
 		});
-		$(container).find('.navigation .stage .belt').on('click', function (e) {
-			var frameOuter = $(e.target.offsetParent.offsetParent);
-			self.move(self.slidedeck)(frameOuter.index());
+		$(container).find('.navigation .stage .belt .frame-outer').on('click', function (e) {
+			self.move(self.slidedeck)($(this).index());
 		});
 
         // Initialise selected style on first items
