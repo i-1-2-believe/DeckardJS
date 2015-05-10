@@ -89,7 +89,7 @@ var Deckard = function (container, config) {
 		markup +=	'</div>';
 		markup +=	'<div id="" class="presentation" style="display:none;">';
 		markup +=		'<div id="" class="curtain curtain-left"></div>';
-		markup +=		'<div id="" class="stage"  style="height:' + dim.height + 'px; width:' + dim.width + 'px;">';
+		markup +=		'<div id="" class="stage" style="height:' + dim.height + 'px; width:' + dim.width + 'px;">';
 		markup +=			'<div id="" class="firefox-stage">';
 		markup +=				'<div id="" class="belt slidedeck">';
 		markup +=					presentation;
@@ -102,7 +102,7 @@ var Deckard = function (container, config) {
 		//Overwrite with new markup
 		$(container).html(markup);
 
-		var slidedeck = {
+		self.slidedeck = {
 			el: $(container).find('.presentation .slidedeck'),
 			total: items.length,
 			current: 1,
@@ -110,7 +110,7 @@ var Deckard = function (container, config) {
 			isEnabled: true,
 			toString: function () { return 'slidedeck'; }
 		};
-		var filmstrip = {
+		self.filmstrip = {
 			el: $(container).find('.navigation .filmstrip'),
 			total: filmstripTotal,
 			current: 1,
@@ -118,7 +118,7 @@ var Deckard = function (container, config) {
 			isEnabled: true,
 			toString: function () { return 'filmstrip'; }
 		};
-		var crumbtrail = {
+		self.crumbtrail = {
 			el: $(container).find('.pagination .crumbtrail'),
 			total: crumbtrailTotal,
 			current: 1,
@@ -127,9 +127,9 @@ var Deckard = function (container, config) {
 			toString: function () { return 'crumbtrail'; }
 		};
 
-		Deckard.mediator.register(slidedeck);
-		Deckard.mediator.register(filmstrip);
-		Deckard.mediator.register(crumbtrail);
+		Deckard.mediator.register(self.slidedeck);
+		Deckard.mediator.register(self.filmstrip);
+		Deckard.mediator.register(self.crumbtrail);
 
 		var trackMoveFactory = function (stream) {
 			return function (event, data) {
@@ -141,43 +141,73 @@ var Deckard = function (container, config) {
 			};
 		};
 
-		Deckard.mediator.subscribe(slidedeck, null, trackMoveFactory(filmstrip));
-		Deckard.mediator.subscribe(filmstrip, null, trackMoveFactory(crumbtrail));
+        // Filmstrip needs to listen to the slidedeck
+		Deckard.mediator.subscribe(self.slidedeck, null, trackMoveFactory(self.filmstrip));
+		// Crumbtrail needs to listen to the filmstrip
+		Deckard.mediator.subscribe(self.filmstrip, null, trackMoveFactory(self.crumbtrail));
 		
 		//Attach move handlers
-		$(container).find('.presentation .curtain-right').on('click', function () { self.move(slidedeck)('left'); });
-		$(container).find('.presentation .curtain-left').on('click', function () { self.move(slidedeck)('right'); });
+		$(container).find('.presentation .curtain-right').on('click', function () { self.move(self.slidedeck)('left'); });
+		$(container).find('.presentation .curtain-left').on('click', function () { self.move(self.slidedeck)('right'); });
 
-		$(container).find('.navigation .curtain-right').on('click', function () { self.move(filmstrip)('left'); });
-		$(container).find('.navigation .curtain-left').on('click', function () {self. move(filmstrip)('right'); });
+		$(container).find('.navigation .curtain-right').on('click', function () { self.move(self.filmstrip)('left'); });
+		$(container).find('.navigation .curtain-left').on('click', function () {self. move(self.filmstrip)('right'); });
 
-		$(container).find('.pagination .curtain-right').on('click', function () { self.move(crumbtrail)('left'); });
-		$(container).find('.pagination .curtain-left').on('click', function () { self.move(crumbtrail)('right'); });
+		$(container).find('.pagination .curtain-right').on('click', function () { self.move(self.crumbtrail)('left'); });
+		$(container).find('.pagination .curtain-left').on('click', function () { self.move(self.crumbtrail)('right'); });
 
-		$(container).find('.presentation').on('swiperight', function () { self.move(slidedeck)('right'); });
-		$(container).find('.presentation').on('swipeleft', function () { self.move(slidedeck)('left'); });
+		$(container).find('.presentation').on('swiperight', function () { self.move(self.slidedeck)('right'); });
+		$(container).find('.presentation').on('swipeleft', function () { self.move(self.slidedeck)('left'); });
 
-		$(container).find('.navigation').on('swiperight', function () { self.move(filmstrip)('right'); });
-		$(container).find('.navigation').on('swipeleft', function () { self.move(filmstrip)('left'); });
+		$(container).find('.navigation').on('swiperight', function () { self.move(self.filmstrip)('right'); });
+		$(container).find('.navigation').on('swipeleft', function () { self.move(self.filmstrip)('left'); });
 
-		$(container).find('.pagination').on('swiperight', function () { self.move(crumbtrail)('right'); });
-		$(container).find('.pagination').on('swipeleft', function () { self.move(crumbtrail)('left'); });
+		$(container).find('.pagination').on('swiperight', function () { self.move(self.crumbtrail)('right'); });
+		$(container).find('.pagination').on('swipeleft', function () { self.move(self.crumbtrail)('left'); });
 
-		$(container).find('.pagination .stage .belt .crumb-outer').on('click', function () {
-			self.move(filmstrip)($(this).index());
+		$(container).find('.pagination .stage .belt').on('click', function (e) {
+			var crumbOuter = $(e.target.offsetParent.offsetParent);
+			self.move(self.filmstrip)(crumbOuter.index());
 		});
-		$(container).find('.navigation .stage .belt .frame-outer').on('click', function () {
-			self.move(slidedeck)($(this).index());
+		$(container).find('.navigation .stage .belt').on('click', function (e) {
+			var frameOuter = $(e.target.offsetParent.offsetParent);
+			self.move(self.slidedeck)(frameOuter.index());
 		});
+
+        // Expose move functions for programmatic manipulation
+        self.goTo = function (index) {
+        	// Limit to no lower than zero
+        	index = Math.max(0, index);
+        	// Limit to no higher than the number of items less one
+        	index = Math.min(index, items.length - 1);
+        	// We need only move the slidedeck, and the filmstrip and cumbtrail will listen out and react accordingly
+            self.move(self.slidedeck)(index);
+        };
+        // Quick functions for start and end
+        self.goToFirst = function () {
+            self.goTo(0);
+        };
+        self.goToLast = function () {
+            self.goTo(items.length - 1);
+        };
+        // Move left and right
+        self.goToLeft = function () {
+        	// Remember, going left is actually moving the deck right
+            self.move(self.slidedeck)('right');
+        };
+        self.goToRight = function () {
+        	// Remember, going right is actually moving the deck left
+            self.move(self.slidedeck)('left');
+        };
 
 		// Reveal everything
 		if (config.enablePagination) {
-		    self.show(crumbtrail);
+		    self.show(self.crumbtrail);
 		}
 		if (config.enableNavigation) {
-		    self.show(filmstrip);
+		    self.show(self.filmstrip);
 		}
-		self.show(slidedeck);
+		self.show(self.slidedeck);
 	}
 };
 
