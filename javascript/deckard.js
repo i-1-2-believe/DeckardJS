@@ -186,7 +186,9 @@ var Deckard = function (container, config) {
 */
 Deckard.prototype.init = function () {
 };
-
+/* move is a function factory that tailors a move strategy depending on the type of stream affected
+ * and the type of vector, i.e. moving to the left or right incrementally, or a integer index.
+*/
 Deckard.prototype.move = function (stream) {
 	return function (vector) {
 		var hasRoom = false;
@@ -230,16 +232,21 @@ Deckard.prototype.move = function (stream) {
 	};
 };
 
+/* To mitigate flash of unstyled content (FOUC), use hiding and showing functions.
+ *
+*/
 Deckard.prototype.hide = function (stream) {
     stream.el.parent().parent().parent().css({'display': 'none'});
     return stream;
 };
-
 Deckard.prototype.show = function (stream) {
 	stream.el.parent().parent().parent().css({'display': 'table'});
 	return stream;
 };
 
+/* mediator exists to allow a decoupled way for component pieces to communicate, namely, by way of
+ * publishing of and subscribing to events, and indeed objects.
+*/
 Deckard.mediator = {
 	// The keys are either the name of an object or event, and the values are a list of callbacks.
 	// Any time an object emits any event, its list of callbacks will be invoked.
